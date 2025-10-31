@@ -6,69 +6,43 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="index.php?type=home">
     <?php
-            if($_SESSION['user']['role_id']==1){
-              echo'
-              <strong>TRANG ADMIN</strong>
-              ';
-            }else if($_SESSION['user']['role_id']==2){
-              echo'
-              <strong>TRANG BIÊN TẬP</strong>
-              ';
-            }else if($_SESSION['user']['role_id']==3){
-              echo'
-              <strong>TRANG TÁC GIẢ</strong>
-              ';
-            }else{
-              echo'
-              <strong>TRANG TÁC GIẢ</strong>
-              ';
-            }
-            ?>
-      
+    $roleNames = [
+        1 => 'TRANG ADMIN',
+        2 => 'TRANG BIÊN TẬP',
+        3 => 'TRANG TÁC GIẢ'
+    ];
+    $roleId = $_SESSION['user']['role_id'] ?? 3;
+    echo '<strong>'.e($roleNames[$roleId] ?? 'TRANG TÁC GIẢ').'</strong>';
+    ?>
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-        </li>
-            <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
             QUẢN LÝ
           </a>
           <ul class="dropdown-menu">
-            <?php
-            if($_SESSION['user']['role_id']==1){
-              echo'
+            <?php if(hasAnyRole([1, 2])): ?>
               <li><a class="dropdown-item" href="index.php?type=cate">Quản lý thể loại</a></li>
-            <li><a class="dropdown-item" href="index.php?type=post">Quản lý bài viết</a></li>
-            <li><a class="dropdown-item" href="index.php?type=user">Quản lý người dùng</a></li>
-              ';
-            }else if($_SESSION['user']['role_id']==2){
-              echo'
-              <li><a class="dropdown-item" href="index.php?type=cate">Quản lý thể loại</a></li>
-            <li><a class="dropdown-item" href="index.php?type=post">Quản lý bài viết</a></li>
-              ';
-            }else if($_SESSION['user']['role_id']==3){
-              echo'
-            <li><a class="dropdown-item" href="index.php?type=postself">Quản lý bài viết</a></li>
-              ';
-            }else{
-              echo'
+              <li><a class="dropdown-item" href="index.php?type=post">Quản lý bài viết</a></li>
+            <?php endif; ?>
+            <?php if(hasRole(1)): ?>
+              <li><a class="dropdown-item" href="index.php?type=user">Quản lý người dùng</a></li>
+            <?php endif; ?>
+            <?php if(hasRole(3)): ?>
               <li><a class="dropdown-item" href="index.php?type=postself">Quản lý bài viết</a></li>
-                ';
-            }
-            ?>
-          
+            <?php endif; ?>
           </ul>
         </li>
-            <li class="nav-item" >
-            <a class="nav-link" href="" id=""><?php echo $_SESSION['user']['userName'];?></a>
-          </li>
-          <li class="nav-item" >
-              <a class="nav-link" href="index.php?logout=1" id="">Đăng xuất</a>
-            </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"><?= e($_SESSION['user']['userName']) ?></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="index.php?logout=1">Đăng xuất</a>
+        </li>
       </ul>
     </div>
   </div>
