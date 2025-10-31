@@ -1,103 +1,111 @@
 <?php
 /**
- * Mở kết nối đến CSDL sử dụng PDO
+ * SECURE PDO Database Layer
+ * Fixed: SQL Injection vulnerabilities with proper prepared statements
  */
+
 define('DBHOST', 'localhost:3307');
-    define('DBUSER', 'uyen');
-    define('DBPASS', 'uyen');
-    define('DBNAME', 'webantoan');
+define('DBUSER', 'uyen');
+define('DBPASS', 'uyen');
+define('DBNAME', 'webantoan');
+
 function pdo_get_connection(){
-    $conn = new PDO('mysql:host='.DBHOST.';dbname='.DBNAME,DBUSER,DBPASS);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    return $conn;
-}
-/**
- * Thực thi câu lệnh sql thao tác dữ liệu (INSERT, UPDATE, DELETE)
- * @param string $sql câu lệnh sql
- * @param array $args mảng giá trị cung cấp cho các tham số của $sql
- * @throws PDOException lỗi thực thi câu lệnh
- */
-function pdo_execute($sql){
-    $sql_args = array_slice(func_get_args(), 1);
-    try{
-        $conn = pdo_get_connection();
-        $stmt = $conn->prepare($sql);
-        $stmt->execute($sql_args);
-        return true;
+    try {
+        $conn = new PDO('mysql:host='.DBHOST.';dbname='.DBNAME.';charset=utf8mb4', DBUSER, DBPASS);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        return $conn;
+    } catch(PDOException $e) {
+        error_log("Database connection error: " . $e->getMessage());
+        die("Lỗi kết nối cơ sở dữ liệu. Vui lòng thử lại sau.");
     }
-    catch(PDOException $e){
-        throw $e;
-    }
-    finally{
-        unset($conn);
-    }
-    return true;
 }
 
 /**
- * Thực thi câu lệnh sql truy vấn dữ liệu (SELECT)
- * @param string $sql câu lệnh sql
- * @param array $args mảng giá trị cung cấp cho các tham số của $sql
- * @return array mảng các bản ghi
- * @throws PDOException lỗi thực thi câu lệnh
+ * Execute SQL (INSERT, UPDATE, DELETE) with prepared statements
+ * @param string $sql SQL query with placeholders
+ * @param mixed ...$args Values for placeholders
+ * @return bool Success status
  */
-function pdo_query($sql){
-    $sql_args = array_slice(func_get_args(), 1);
+function pdo_execute($sql, ...$args){
     try{
         $conn = pdo_get_connection();
         $stmt = $conn->prepare($sql);
-        $stmt->execute($sql_args);
-        $rows = $stmt->fetchAll();
-        return $rows;
+        $stmt->execute($args);
+        return true;
     }
     catch(PDOException $e){
-        throw $e;
+        error_log("Query error: " . $e->getMessage());
+        return false;
     }
     finally{
         unset($conn);
     }
 }
+
 /**
- * Thực thi câu lệnh sql truy vấn một bản ghi
- * @param string $sql câu lệnh sql
- * @param array $args mảng giá trị cung cấp cho các tham số của $sql
- * @return array mảng chứa bản ghi
- * @throws PDOException lỗi thực thi câu lệnh
+ * Query multiple rows
+ * @param string $sql SQL query with placeholders
+ * @param mixed ...$args Values for placeholders
+ * @return array Array of records
  */
-function pdo_query_one($sql){
-    $sql_args = array_slice(func_get_args(), 1);
+function pdo_query($sql, ...$args){
     try{
         $conn = pdo_get_connection();
         $stmt = $conn->prepare($sql);
-        $stmt->execute($sql_args);
+        $stmt->execute($args);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $rows;
+    }
+    catch(PDOException $e){
+        error_log("Query error: " . $e->getMessage());
+        return [];
+    }
+    finally{
+        unset($conn);
+    }
+}
+
+/**
+ * Query single row
+ * @param string $sql SQL query with placeholders
+ * @param mixed ...$args Values for placeholders
+ * @return array|false Single record or false
+ */
+function pdo_query_one($sql, ...$args){
+    try{
+        $conn = pdo_get_connection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($args);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row;
     }
     catch(PDOException $e){
-        throw $e;
+        error_log("Query error: " . $e->getMessage());
+        return false;
     }
     finally{
         unset($conn);
     }
 }
+
 /**
- * Thực thi câu lệnh sql truy vấn một giá trị
- * @param string $sql câu lệnh sql
- * @param array $args mảng giá trị cung cấp cho các tham số của $sql
- * @return giá trị
- * @throws PDOException lỗi thực thi câu lệnh
+ * Query single value
+ * @param string $sql SQL query with placeholders
+ * @param mixed ...$args Values for placeholders
+ * @return mixed Single value
  */
-function pdo_query_value($sql){
-    $sql_args = array_slice(func_get_args(), 1);
+function pdo_query_value($sql, ...$args){
     try{
         $conn = pdo_get_connection();
         $stmt = $conn->prepare($sql);
-        $stmt->execute($sql_args);
+        $stmt->execute($args);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return array_values($row)[0];
+        return $row ? array_values($row)[0] : null;
     }
     catch(PDOException $e){
-        throw $e;
+        error_log("Query error: " . $e->getMessage());
+        return null;
     }
     finally{
         unset($conn);
