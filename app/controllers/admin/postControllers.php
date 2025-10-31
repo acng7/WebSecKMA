@@ -1,0 +1,27 @@
+<?php
+
+if(isset($_GET['type1'])){
+    if($_GET['type1']=='seepost'){
+        if(isset($_POST['btn-save-post'])){
+            updatePost1($_POST['note'],$_POST['category_id'],$_GET['id']);
+        }
+        $getPostById=getPostById($_GET['id']);
+        $getAllCategory=getAllCategory();
+        include_once("app/views/admin/seepost.views.php");
+    }
+}else{
+    if(isset($_GET['del'])){
+        delPostConfirm($_GET['del']);
+    }
+    if(isset($_GET['confirm'])){
+        acceptPost($_GET['confirm']);
+    }
+    if(isset($_GET['hide'])){
+        hidePost($_GET['hide']);
+    }
+    if(isset($_GET['unhide'])){
+        unHidePost($_GET['unhide']);
+    }
+    $getAllPost1=getAllPost1();
+    include_once("app/views/admin/post.views.php");
+}

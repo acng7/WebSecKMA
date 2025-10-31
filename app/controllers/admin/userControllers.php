@@ -1,0 +1,9 @@
+<?php
+        if(isset($_GET['active'])){
+            activeUser($_GET['active']);
+        }
+        if(isset($_GET['unactive'])){
+            unActiveUser($_GET['unactive']);
+        }
+            $getAllUser=getAllUser();
+    include_once("app/views/admin/user.views.php");
