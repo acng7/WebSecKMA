@@ -1,6 +1,16 @@
 <h1>QUẢN LÝ BÀI VIẾT</h1>
-<a href="index.php?type=postself&type1=addpost">THÊM BÀI VIẾT</a>
-<table class="table">
+
+<?php if($error = getFlashMessage('error')): ?>
+  <div class="alert alert-danger"><?= e($error) ?></div>
+<?php endif; ?>
+
+<?php if($success = getFlashMessage('success')): ?>
+  <div class="alert alert-success"><?= e($success) ?></div>
+<?php endif; ?>
+
+<a href="index.php?type=postself&type1=addpost" class="btn btn-primary mb-3">THÊM BÀI VIẾT</a>
+
+<table class="table table-striped">
   <thead>
     <tr>
       <th scope="col">STT</th>
@@ -17,60 +27,40 @@
   <tbody>
     <?php
     $i=1;
-        foreach ($getAllPostByIdAuthor as $key) {
-            echo'
-            <tr>
-      <th scope="row">'.$i++.'</th>
-      <td><img src="'.$key['postImage'].'" width="50" /></td>
-      <td>'.$key['postName'].'</td>
-      <td>'.$key['postDescription'].'</td>
-      <td>'.$key['postDate'].'</td>
-      <td>'.$key['nameCategory'].'</td>';
-      switch ($key['isAccepted']) {
-        case 0:
-            echo '<td>Được duyệt</td>';
-            break;
-            case 1:
-                echo '<td>Đang chờ duyệt đăng</td>';
-            
-                break;
-                case 2:
-                    echo '<td>Đang chờ duyệt sửa</td>';
-            
-                    break;
-                    case 3:
-                        echo '<td>Đang chờ duyệt xóa</td>';
-                        break;
-                        case 4:
-                          echo '<td>Bị ẩn</td>';
-                          break;
+    foreach ($getAllPostByIdAuthor as $key) {
+        echo '<tr>';
+        echo '<th scope="row">'.e($i++).'</th>';
+        echo '<td><img src="'.e($key['postImage']).'" width="50" alt="Post" /></td>';
+        echo '<td>'.e($key['postName']).'</td>';
+        echo '<td>'.e($key['postDescription']).'</td>';
+        echo '<td>'.e($key['postDate']).'</td>';
+        echo '<td>'.e($key['nameCategory']).'</td>';
         
-        default:
-            # code...
-            break;
-      }
-      if($key['isAccepted']==0 || $key['isAccepted']==2 ){
-        echo'
-      <td><a href="index.php?type=postself&type1=fixpost&id='.$key['id_post'].'">Sửa</a></td>';
-      }else{
-        echo'
-        <td><a>Chưa hoàn tất phê duyệt</a></td>';
-      }
-      if($key['isAccepted']==0){
-        echo'
-        <td><a href="index.php?type=postself&del='.$key['id_post'].'">Xóa</a></td>';
-      }else if($key['isAccepted']==3){
-        echo'
-        <td><a href="index.php?type=postself&restore='.$key['id_post'].'">Khôi phục</a></td>';
-      }else{
-        echo'
-        <td><a>Chưa hoàn tất phê duyệt</a></td>';
-      }
-      echo'
-    </tr>
-            ';
+        switch ($key['isAccepted']) {
+            case 0: echo '<td><span class="badge bg-success">Được duyệt</span></td>'; break;
+            case 1: echo '<td><span class="badge bg-warning">Chờ duyệt đăng</span></td>'; break;
+            case 2: echo '<td><span class="badge bg-info">Chờ duyệt sửa</span></td>'; break;
+            case 3: echo '<td><span class="badge bg-danger">Chờ duyệt xóa</span></td>'; break;
+            case 4: echo '<td><span class="badge bg-secondary">Bị ẩn</span></td>'; break;
+            default: echo '<td><span class="badge bg-secondary">Không xác định</span></td>'; break;
         }
+        
+        if($key['isAccepted']==0 || $key['isAccepted']==2){
+            echo '<td><a href="index.php?type=postself&type1=fixpost&id='.e($key['id_post']).'" class="btn btn-sm btn-warning">Sửa</a></td>';
+        }else{
+            echo '<td><span class="text-muted">Chưa hoàn tất</span></td>';
+        }
+        
+        if($key['isAccepted']==0){
+            echo '<td><a href="index.php?type=postself&del='.e($key['id_post']).'" class="btn btn-sm btn-danger" onclick="return confirm(\'Xóa bài viết này?\')">Xóa</a></td>';
+        }elseif($key['isAccepted']==3){
+            echo '<td><a href="index.php?type=postself&restore='.e($key['id_post']).'" class="btn btn-sm btn-success" onclick="return confirm(\'Khôi phục bài viết này?\')">Khôi phục</a></td>';
+        }else{
+            echo '<td><span class="text-muted">Chưa hoàn tất</span></td>';
+        }
+        
+        echo '</tr>';
+    }
     ?>
-    
   </tbody>
 </table>
