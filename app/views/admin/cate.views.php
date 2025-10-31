@@ -1,5 +1,17 @@
 <h1>QUẢN LÝ DANH MỤC</h1>
-<a href="index.php?type=cate&type1=addcate">THÊM DANH MỤC</a>
+
+<?php
+// Display flash messages
+if($error = getFlashMessage('error')): ?>
+  <div class="alert alert-danger"><?= e($error) ?></div>
+<?php endif; ?>
+
+<?php if($success = getFlashMessage('success')): ?>
+  <div class="alert alert-success"><?= e($success) ?></div>
+<?php endif; ?>
+
+<a href="index.php?type=cate&type1=addcate" class="btn btn-primary mb-3">THÊM DANH MỤC</a>
+
 <table class="table">
   <thead>
     <tr>
@@ -12,25 +24,20 @@
   <tbody>
     <?php
     $i=1;
-        foreach ($getAllCategory1 as $key) {
-            echo'
-            <tr>
-      <th scope="row">'.$i++.'</th>
-      <td>'.$key['nameCategory'].'</td>
-    <td><a href="index.php?type=cate&type1=fixcate&id='.$key['id_post_category'].'">Sửa</a></td>';
-    if($key['delCategory']==0){
-        echo'
-        <td><a href="index.php?type=cate&hide='.$key['id_post_category'].'">Ẩn</a></td>';
-    }else if($key['delCategory']==1){
-        echo'
-        <td><a href="index.php?type=cate&unhide='.$key['id_post_category'].'">Bỏ ẩn</a></td>';
-    }
-    
-    echo'
-    </tr>
-            ';
+    foreach ($getAllCategory1 as $key) {
+        echo '<tr>';
+        echo '<th scope="row">'.e($i++).'</th>';
+        echo '<td>'.e($key['nameCategory']).'</td>';
+        echo '<td><a href="index.php?type=cate&type1=fixcate&id='.e($key['id_post_category']).'" class="btn btn-sm btn-warning">Sửa</a></td>';
+        
+        if($key['delCategory']==0){
+            echo '<td><a href="index.php?type=cate&hide='.e($key['id_post_category']).'" class="btn btn-sm btn-secondary" onclick="return confirm(\'Bạn có chắc muốn ẩn danh mục này?\')">Ẩn</a></td>';
+        }else if($key['delCategory']==1){
+            echo '<td><a href="index.php?type=cate&unhide='.e($key['id_post_category']).'" class="btn btn-sm btn-success" onclick="return confirm(\'Bạn có chắc muốn bỏ ẩn danh mục này?\')">Bỏ ẩn</a></td>';
         }
+        
+        echo '</tr>';
+    }
     ?>
-    
   </tbody>
 </table>
