@@ -1,30 +1,38 @@
 <link rel="stylesheet" href="public/css/index.css">
 <section class="light">
-	<div class="container py-2">
-		<div class="h1 text-center text-dark" id="pageHeaderTitle">Tin tức liên quan đến tìm kiếm "<?php echo $search; ?>"</div>
-    <?php
-        foreach ($getAllPostBySearch as $key => $value) {
-?>
-<article class="postcard light blue">
-			<a class="postcard__img_link" href="index.php?type=detail&id=<?php echo $value['id_post'];?>">
-				<img class="postcard__img" src="<?php echo $value['postImage'];?>" alt="Image Title" />
-			</a>
-			<div class="postcard__text t-dark">
-				<h1 class="postcard__title blue"><a href="index.php?type=detail&id=<?php echo $value['id_post'];?>"><?php echo $value['postName'];?></a></h1>
-				<div class="postcard__subtitle small">
-					<time datetime="2020-05-25 12:00:00">
-						<i class="fas fa-calendar-alt mr-2"></i><?php echo $value['postDate'];?>
-					</time>
-				</div>
-				<div class="postcard__bar"></div>
-				<div class="postcard__preview-txt"><?php echo $value['postDescription'];?></div>
-                <ul class="postcard__tagbox">
-					<li class="tag__item"><i class="fas fa-tag mr-2"></i>Tác giả: <?php echo $value['fullName'];?></li>
-				</ul>
-			</div>
-		</article>
-<?php
-        }
-    ?>
-	</div>
+  <div class="container py-2">
+    <div class="h1 text-center text-dark" id="pageHeaderTitle">
+      Tin tức liên quan đến tìm kiếm "<?= e($search) ?>"
+    </div>
+    
+    <?php if(empty($getAllPostBySearch)): ?>
+      <div class="alert alert-info text-center">
+        <p>Không tìm thấy bài viết nào phù hợp với từ khóa "<?= e($search) ?>".</p>
+        <a href="index.php?type=home" class="btn btn-primary">Quay về trang chủ</a>
+      </div>
+    <?php endif; ?>
+    
+    <?php foreach ($getAllPostBySearch as $post): ?>
+      <article class="postcard light blue">
+        <a class="postcard__img_link" href="index.php?type=detail&id=<?= e($post['id_post']) ?>">
+          <img class="postcard__img" src="<?= e($post['postImage']) ?>" alt="<?= e($post['postName']) ?>" />
+        </a>
+        <div class="postcard__text t-dark">
+          <h1 class="postcard__title blue">
+            <a href="index.php?type=detail&id=<?= e($post['id_post']) ?>"><?= e($post['postName']) ?></a>
+          </h1>
+          <div class="postcard__subtitle small">
+            <time datetime="<?= e($post['postDate']) ?>">
+              <i class="fas fa-calendar-alt mr-2"></i><?= e($post['postDate']) ?>
+            </time>
+          </div>
+          <div class="postcard__bar"></div>
+          <div class="postcard__preview-txt"><?= e($post['postDescription']) ?></div>
+          <ul class="postcard__tagbox">
+            <li class="tag__item"><i class="fas fa-tag mr-2"></i>Tác giả: <?= e($post['fullName']) ?></li>
+          </ul>
+        </div>
+      </article>
+    <?php endforeach; ?>
+  </div>
 </section>
