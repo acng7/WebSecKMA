@@ -1,10 +1,5 @@
 <?php
-/**
- * SECURE Category Controller
- * Fixed: CSRF protection, input validation, XSS prevention, authorization
- */
 
-// Authorization check - only Admin and Editor can access
 requireAuth([1, 2]);
 
 if(isset($_GET['type1'])){
