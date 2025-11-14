@@ -61,7 +61,7 @@
       <div class="d-flex justify-content-center align-items-center h-100">
         <div class="text-white">
           <h1 class="mb-3">TRANG TIN TỨC</h1>
-          <h4 class="mb-3">2024</h4>
+          <h4 class="mb-3">2025</h4>
         </div>
       </div>
     </div>
