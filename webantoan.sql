@@ -41,7 +41,7 @@ CREATE TABLE `posts` (
   `postDate` datetime NOT NULL DEFAULT current_timestamp(),
   `postContent` varchar(10000) NOT NULL,
   `isAccepted` tinyint(4) NOT NULL DEFAULT 1,
-  `note` varchar(255) NOT NULL,
+  `note` varchar(255) NULL,
   `user_id` bigint(20) NOT NULL,
   `category_id` bigint(20) DEFAULT 4
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;

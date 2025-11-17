@@ -117,7 +117,7 @@ function updatePost1($note, $category_id, $id_post){
 function addPost($postName, $postImage, $postDescription, $postContent, $user_id){
     $sql="INSERT INTO posts(postName, postImage, postDescription, postContent, user_id) 
           VALUES (?, ?, ?, ?, ?)";
-    return pdo_execute($sql, $postName, $postImage, $postDescription, $postContent, $user_id);
+    return pdo_execute_insert($sql, $postName, $postImage, $postDescription, $postContent, $user_id);
 }
 
 // CATEGORY FUNCTIONS

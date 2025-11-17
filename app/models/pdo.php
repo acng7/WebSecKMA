@@ -44,6 +44,31 @@ function pdo_execute($sql, ...$args)
     }
 }
 
+function pdo_execute_insert($sql, ...$args)
+{
+    try {
+        $conn = pdo_get_connection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($args);
+
+        // Sửa đổi: Trả về ID của bản ghi vừa được tạo
+        return $conn->lastInsertId();
+    } catch (PDOException $e) {
+        $errorMsg = "Query error: " . $e->getMessage();
+        error_log($errorMsg);
+
+        // Ghi log vào file
+        $logFile = __DIR__ . '/../../logs/pdo_insert_error.log';
+        $timestamp = date('Y-m-d H:i:s');
+        $logEntry = "[$timestamp] SQL: $sql | Args: " . json_encode($args) . " | Error: " . $e->getMessage() . "\n";
+        file_put_contents($logFile, $logEntry, FILE_APPEND);
+
+        return 0; // Trả về 0 hoặc FALSE nếu thất bại
+    } finally {
+        unset($conn);
+    }
+}
+
 /**
  * Query multiple rows
  * @param string $sql SQL query with placeholders

@@ -1,0 +1,2 @@
+[2025-11-17 17:36:34] SQL: INSERT INTO posts(postName, postImage, postDescription, postContent, user_id) 
+          VALUES (?, ?, ?, ?, ?) | Args: ["TIN T\u1ee8C N\u0102NG L\u01af\u1ee2NG XANH 2025","https:\/\/picsum.photos\/1000\/1000","M\u00f4 t\u1ea3 TIN T\u1ee8C N\u0102NG L\u01af\u1ee2NG XANH 2025","M\u00f4 t\u1ea3 TIN T\u1ee8C N\u0102NG L\u01af\u1ee2NG XANH 2025",3] | Error: SQLSTATE[HY000]: General error: 1364 Field 'note' doesn't have a default value
