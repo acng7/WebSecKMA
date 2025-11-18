@@ -37,7 +37,14 @@ function pdo_execute($sql, ...$args)
         $stmt->execute($args);
         return true;
     } catch (PDOException $e) {
-        error_log("Query error: " . $e->getMessage());
+        $errorMsg = "Query error: " . $e->getMessage();
+        error_log($errorMsg);
+
+        // Ghi log vào file
+        $logFile = __DIR__ . '/../../logs/pdo_error.log';
+        $timestamp = date('Y-m-d H:i:s');
+        $logEntry = "[$timestamp] SQL: $sql | Args: " . json_encode($args) . " | Error: " . $e->getMessage() . "\n";
+        file_put_contents($logFile, $logEntry, FILE_APPEND);
         return false;
     } finally {
         unset($conn);
@@ -58,7 +65,7 @@ function pdo_execute_insert($sql, ...$args)
         error_log($errorMsg);
 
         // Ghi log vào file
-        $logFile = __DIR__ . '/../../logs/pdo_insert_error.log';
+        $logFile = __DIR__ . '/../../logs/pdo_error.log';
         $timestamp = date('Y-m-d H:i:s');
         $logEntry = "[$timestamp] SQL: $sql | Args: " . json_encode($args) . " | Error: " . $e->getMessage() . "\n";
         file_put_contents($logFile, $logEntry, FILE_APPEND);
@@ -84,7 +91,14 @@ function pdo_query($sql, ...$args)
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $rows;
     } catch (PDOException $e) {
-        error_log("Query error: " . $e->getMessage());
+        $errorMsg = "Query error: " . $e->getMessage();
+        error_log($errorMsg);
+
+        // Ghi log vào file
+        $logFile = __DIR__ . '/../../logs/pdo_error.log';
+        $timestamp = date('Y-m-d H:i:s');
+        $logEntry = "[$timestamp] SQL: $sql | Args: " . json_encode($args) . " | Error: " . $e->getMessage() . "\n";
+        file_put_contents($logFile, $logEntry, FILE_APPEND);
         return [];
     } finally {
         unset($conn);
