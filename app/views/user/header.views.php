@@ -25,7 +25,7 @@
               <?php endforeach; ?>
             </ul>
           </li>
-          <?php if(isLoggedIn()): ?>
+          <?php if (isLoggedIn()): ?>
             <li class="nav-item">
               <a class="nav-link text-white" href="#"><?= e($_SESSION['user']['userName']) ?></a>
             </li>
@@ -51,20 +51,20 @@
   </nav>
 
   <?php
-  $showBanner = !isset($_GET['type']) || 
-                (isset($_GET['type']) && !in_array($_GET['type'], ['login', 'regis', 'detail']));
-  
-  if($showBanner):
+  $showBanner = !isset($_GET['type']) ||
+    (isset($_GET['type']) && !in_array($_GET['type'], ['login', 'regis', 'detail']));
+
+  if ($showBanner):
   ?>
-  <div class="p-5 text-center bg-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLsxYQncjgVR6iwLSBeWxhGPVKsB_fCGQU0A&s'); height: 400px; margin-top: 58px;">
-    <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
-      <div class="d-flex justify-content-center align-items-center h-100">
-        <div class="text-white">
-          <h1 class="mb-3">TRANG TIN TỨC</h1>
-          <h4 class="mb-3">2025</h4>
+    <div class="p-5 text-center bg-image" style="background-image: url('https://s.france24.com/media/display/e6279b3c-db08-11ee-b7f5-005056bf30b7/w:1280/p:16x9/news_en_1920x1080.jpg'); height: 400px; margin-top: 58px; background-position: center; background-size: cover; background-repeat: no-repeat;">
+      <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
+        <div class="d-flex justify-content-center align-items-center h-100">
+          <div class="text-white">
+            <h1 class="mb-3">TRANG TIN TỨC</h1>
+            <h4 class="mb-3">2025</h4>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   <?php endif; ?>
 </header>
