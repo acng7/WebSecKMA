@@ -94,8 +94,7 @@ function delPostConfirm($id)
 
 function acceptPost($id)
 {
-    $sql = "UPDATE posts SET isAccepted=0 
-          WHERE id_post=? AND category_id!=4 AND (isAccepted=1 OR isAccepted=2)";
+    $sql = "UPDATE posts SET isAccepted=0 WHERE id_post=?";
     return pdo_execute($sql, $id);
 }
 
